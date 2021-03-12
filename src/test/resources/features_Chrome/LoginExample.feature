@@ -18,19 +18,8 @@
 #Sample Feature Definition Template
 Feature: Search Flights
 
-  #Scenario Outline: Validate that when trip is oneway we can search flights
-    #Given That user is in Homepage
-    #Then select the trip to "<trip selection>"
-    #Then Select the Following values for your flight of return type "<trip selection>"
-    #|Attribute|Values|
-    #|fromCity	|DEL|
-    #|toCity	|BOM|
-    #|departure|March-2021-10-Mar|
-#
-    #Examples:  
-      #| trip selection   |
-      #| oneWayTrip        |
-      #
+   
+
    Scenario Outline: Validate that when trip is roundTrip we can search flights
     Given That user is in Homepage
     Then select the trip to "<trip selection>"
@@ -59,4 +48,4 @@ Feature: Search Flights
     Examples:  
       | trip selection   |
       | roundTrip        |
- 
+

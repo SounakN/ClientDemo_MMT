@@ -37,7 +37,7 @@ public class PageObjects_FlightSearchedPage {
 
 	@FindBy(how = How.XPATH, using = "//button[text()='Continue']")
 	public WebElement FootermenuContinue;
-
+	
 	public PageObjects_FlightSearchedPage() {
 		PageFactory.initElements(driver, this);
 	}
@@ -120,7 +120,6 @@ public class PageObjects_FlightSearchedPage {
 			return "Got Error";
 		}
 	}
-
 	public Boolean Select_flight_filter(String data) {
 		try {
 
