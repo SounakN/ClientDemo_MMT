@@ -20,7 +20,7 @@ Feature: Search Flights
 
    
 
-   Scenario Outline: Validate that when trip is roundTrip we can search flights properly
+   Scenario Outline: Validate that when trip is roundTrip we Search flight in Past Date it should not be allowed to be selected
     Given That user is in Homepage
     Then select the trip to "<trip selection>"
     Then Select the Following values for your flight of return type "<trip selection>"

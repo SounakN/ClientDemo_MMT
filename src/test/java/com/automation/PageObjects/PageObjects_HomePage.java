@@ -246,7 +246,7 @@ public class PageObjects_HomePage {
 			DatewisePrice = new HashMap<String, Integer>();
 			if(e.getMessage().equalsIgnoreCase("It is not clickable at this sent in date So no proceeding with Testing")) {
 				if(DateType.equalsIgnoreCase("departure")) {
-					DatewisePrice.put("departure", 0);
+					DatewisePrice.put("departure", -1);
 				}else {
 					DatewisePrice.put("return", 0);
 				}

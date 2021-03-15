@@ -79,7 +79,7 @@ public class StepDefinition_Homepage {
 						Assert.assertNotNull(RoundTrip);
 						RoundTrip.putAll(OneWayTrip);
 						System.out.println(RoundTrip);
-						if(RoundTrip.containsValue(0)) {
+						if(RoundTrip.containsValue(-1)) {
 							user.EmbedText(SetUp.Sc, "The sent in Date in inPOast cannot proceed with Testing");
 							break;
 						}
