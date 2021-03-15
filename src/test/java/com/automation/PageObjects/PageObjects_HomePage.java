@@ -208,7 +208,7 @@ public class PageObjects_HomePage {
 								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date");
 								throw new Exception("It is not clickable at this sent in date So no proceeding with Testing");
 							}else {
-								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date");
+								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date or previous to To Date");
 								throw new Exception("It is not clickable at this sent in date although it is not in past");
 							}
 							
