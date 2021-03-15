@@ -20,7 +20,7 @@ import com.automation.utilities.ActionMethods;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 
-public class StepDef_FlightSearchedPage {
+public class StepDefinition_FlightSearchedPage {
 	
 	public ActionMethods user = new ActionMethods();
 	public static HashMap<String,Integer> priceofFlights ;

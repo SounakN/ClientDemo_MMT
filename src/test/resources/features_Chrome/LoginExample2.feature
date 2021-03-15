@@ -27,21 +27,10 @@ Feature: Search Flights
     |Attribute|Values|
     |fromCity	|DEL|
     |toCity	|HYD|
-    |departure|March-2021-15-Mar|
+    |departure|March-2021-13-Mar|
     |return|May-2021-10-May|
-    Then Click on the Search Button and Verify that you are on Flight Search page
-    Then Validate the following details after flight has been searched "India"
-    |Attribute|Values|
-    |Trip Style|Round Trip|
-    |FROM	|Delhi|
-    |TO	|Hyderabad|
-    Then filter and select the flights based on following flight companies
-    |Flight Companies|
-    |Air India|
-		|AirAsia	|
-		|Go Air|
-		Then Fetch the flight fare from the floating menu and compare
-		Then Go to Review your booking page and verify final flight fare
+
+  
 		
 
 

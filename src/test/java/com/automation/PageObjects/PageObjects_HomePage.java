@@ -198,8 +198,20 @@ public class PageObjects_HomePage {
 								"./div[@class='DayPicker-Body']//div[contains(@aria-label,'" + checkDate + "')]"));
 						String AttrAriadisabled = DatetobeChoosen.getAttribute("aria-disabled");
 						if (AttrAriadisabled.equalsIgnoreCase("true")) {
-							user.EmbedText(SetUp.Sc, "Date is not clickable");
-							throw new Exception("It is not clickable at this sent in date");
+							//Check for Past dates
+							String parsabelDate = Day+"-"+Month_inshort+"-"+Year;
+							System.out.println(parsabelDate);
+							Date currentDate = new Date();
+							Date OutPutDate = user.getDate(parsabelDate);
+							int compareDate = currentDate.compareTo(OutPutDate);
+							if(compareDate >0) {
+								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date");
+								throw new Exception("It is not clickable at this sent in date So no proceeding with Testing");
+							}else {
+								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date");
+								throw new Exception("It is not clickable at this sent in date although it is not in past");
+							}
+							
 						} else {
 							user.isWebElementPresent(DatetobeChoosen, driver, 3);
 							try {
@@ -231,14 +243,25 @@ public class PageObjects_HomePage {
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			return null;
+			DatewisePrice = new HashMap<String, Integer>();
+			if(e.getMessage().equalsIgnoreCase("It is not clickable at this sent in date So no proceeding with Testing")) {
+				if(DateType.equalsIgnoreCase("departure")) {
+					DatewisePrice.put("departure", 0);
+				}else {
+					DatewisePrice.put("return", 0);
+				}
+				return DatewisePrice;
+			}else {
+				return null;
+			}
+			
 		} 
 	}
 	public PageObjects_FlightSearchedPage clickOnSearch() {
 		try {
 			user.isWebElementPresent(SearchButtonHomepage, driver, 2);
 			user.isClickable(driver, SearchButtonHomepage, 2);
-			user.EmbedText(SetUp.Sc, "Clicked on the Serach button");
+			user.EmbedText(SetUp.Sc, "Clicked on the Search button");
 			POfS =new PageObjects_FlightSearchedPage();
 			return POfS;
 		}catch(Exception e) {

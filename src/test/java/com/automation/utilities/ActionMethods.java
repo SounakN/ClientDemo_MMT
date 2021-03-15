@@ -63,7 +63,19 @@ import io.cucumber.java.Scenario;
 public class ActionMethods {
 
 	public static WebDriverWait wait;
-
+	
+	public Date getDate(String date) {  
+		try {
+		    SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");  
+		    Date OutDate= formatter.parse(date);	   
+		    System.out.println(OutDate);  
+		    return OutDate;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}  
 	public void sync_withStaleElem(WebDriver driver, WebElement element) {
 		try {
 			FluentWait<WebDriver> wait = new WebDriverWait(driver, 30).ignoring(StaleElementReferenceException.class)

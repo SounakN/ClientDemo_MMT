@@ -15,7 +15,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
-public class StepDef_Homepage {
+public class StepDefinition_Homepage {
 
 	public ActionMethods user = new ActionMethods();
 	public static HashMap<String, Integer> OneWayTrip = new HashMap<String, Integer>();
@@ -79,8 +79,13 @@ public class StepDef_Homepage {
 						Assert.assertNotNull(RoundTrip);
 						RoundTrip.putAll(OneWayTrip);
 						System.out.println(RoundTrip);
+						if(RoundTrip.containsValue(0)) {
+							user.EmbedText(SetUp.Sc, "The sent in Date in inPOast cannot proceed with Testing");
+							break;
+						}
 					}
 				}
+				
 			}
 
 		} catch (Exception e) {
