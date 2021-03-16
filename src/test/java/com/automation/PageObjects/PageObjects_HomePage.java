@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotSelectableException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -124,17 +125,41 @@ public class PageObjects_HomePage {
 			if (!checkclickable) {
 				System.out.println("Not clickable");
 			}
-			WebElement citychoicedropdown = detailsOfTrip
-					.findElement(By.xpath("./div/label[@for='" + CityType + "']/following-sibling::div[1]//input"));
-			user.isWebElementPresent(citychoicedropdown, driver, 3);
+			
+			By cityChoicedropdownlocator = By.xpath("./div/label[@for='" + CityType + "']/following-sibling::div[1]//input");
+			 WebElement citychoicedropdown= user.fluentWaitonElem(cityChoicedropdownlocator,detailsOfTrip,driver,300,10);
 			citychoicedropdown.sendKeys(data);
-			
+			user.waiting(2000);
 			user.EmbedText(SetUp.Sc, "Sent in Data for : "+CityType+" and the value is :: "+data);
-			
-			By choosefromSuggestion_locator = By.xpath("//p[text()='SUGGESTIONS ']/parent::div/following-sibling::ul/li//div[text()='" + data + "']");
-			WebElement choosefromSuggestion = user.fluentWaitonElem(choosefromSuggestion_locator,driver,30,05);
-			Actions a = new Actions(driver);
-			a.moveToElement(choosefromSuggestion).click().build().perform();
+			By choosefromSuggestion_locator = null;
+			WebElement choosefromSuggestion;
+
+			int i =0;
+			int counter =0;
+//			Actions a = new Actions(driver);
+//			a.moveToElement(choosefromSuggestion).click().build().perform();
+			while(i==0)
+			{
+				try {
+					choosefromSuggestion_locator = By.xpath("//p[text()='SUGGESTIONS ']/parent::div/following-sibling::ul/li//div[text()='" + data + "']/ancestor::li");
+					choosefromSuggestion = user.fluentWaitonElem(choosefromSuggestion_locator,driver,300,05);			
+					choosefromSuggestion.click();
+					i=1;
+				}
+				catch(org.openqa.selenium.StaleElementReferenceException e) {
+					
+					counter++; 
+					String val = citychoicedropdown.getAttribute("Value");
+					System.out.println("the value before while ::"+val);
+					while(!val.equalsIgnoreCase("")) {
+						citychoicedropdown.sendKeys(Keys.chord(Keys.CONTROL,"a", Keys.DELETE));
+						val = citychoicedropdown.getAttribute("Value");		
+						System.out.println("The value in While :: "+val);
+					}
+					citychoicedropdown.sendKeys(data);															
+					System.out.println("In the catch block for the :: "+counter);	
+					}
+			}
 			user.EmbedText(SetUp.Sc, "Choose the given city");
 			return true;
 
@@ -248,7 +273,7 @@ public class PageObjects_HomePage {
 				if(DateType.equalsIgnoreCase("departure")) {
 					DatewisePrice.put("departure", -1);
 				}else {
-					DatewisePrice.put("return", 0);
+					DatewisePrice.put("return", -1);
 				}
 				return DatewisePrice;
 			}else {

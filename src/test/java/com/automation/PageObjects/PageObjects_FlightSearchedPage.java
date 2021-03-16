@@ -1,5 +1,7 @@
 package com.automation.PageObjects;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
@@ -37,6 +39,17 @@ public class PageObjects_FlightSearchedPage {
 
 	@FindBy(how = How.XPATH, using = "//button[text()='Continue']")
 	public WebElement FootermenuContinue;
+	
+	@FindBy(how = How.XPATH, using = "(//div[contains(@id,'flight_list_item')])[1]//div[@class='priceSection']/div/div")
+	public WebElement SingLeTripLowestFare;
+	
+	@FindBy(how = How.XPATH, using = "(//div[contains(@id,'flight_list_item')])[1]//div[@class='priceSection']/div/button")
+	public static  WebElement SingLeTripLowestFareButton;
+	
+	
+	public static int k;
+	public static WebElement ButtonToBookSingleTrip;
+	public static List<WebElement> MultipleOptionSelectionforPrices;
 	
 	public PageObjects_FlightSearchedPage() {
 		PageFactory.initElements(driver, this);
@@ -122,7 +135,6 @@ public class PageObjects_FlightSearchedPage {
 	}
 	public Boolean Select_flight_filter(String data) {
 		try {
-
 			Boolean check = user.ScrollIntoView(driver, AirlinesFilter);
 			By Airlinefilteredname_locator = By
 					.xpath("//p[text()='Airlines']/following-sibling::div//span[@title='" + data + "']");
@@ -132,7 +144,7 @@ public class PageObjects_FlightSearchedPage {
 				WebElement AirlinefiltercheckBox = Airlinefilteredname
 						.findElement(By.xpath("./parent::span/ancestor::label"));
 				AirlinefiltercheckBox.click();
-				user.EmbedText(SetUp.Sc, "Selected the flight in filter with lowest fare");
+				user.EmbedText(SetUp.Sc, "Selected the flight in filter with lowest fare :: "+data);
 				Thread.sleep(3000);
 				user.embedScreenshot(driver, SetUp.Sc, "Screenshot for fligt Selected");
 				return true;
@@ -146,11 +158,81 @@ public class PageObjects_FlightSearchedPage {
 			return false;
 		}
 	}
+	public String fetch_priceforSingleTrips() {
+		try {
+			user.isWebElementPresent(SingLeTripLowestFare, driver, 2);
+			String priceFromMainHeader = SingLeTripLowestFare.getText();
+			System.out.println("The price from main header is:: "+priceFromMainHeader);
+			
+			String PriceToSentBack[]=null;
+			
+			user.embedScreenshot(driver, SetUp.Sc, "We have the button");
+			//checking whether it is view prices or BookNow
+			k=0;
+			String Buttonname = SingLeTripLowestFareButton.getText();
+			if(Buttonname.equalsIgnoreCase("View Prices")) {
+				user.isClickable(driver, SingLeTripLowestFareButton, 30);
+				MultipleOptionSelectionforPrices = driver.findElements(By.xpath("(//div[contains(@id,'flight_list_item')])[1]/div[@class='collapse show']//div[@class='viewFareRowWrap']//div[contains(@class,'viewFareBtnCol')]"));
+
+				user.embedScreenshot(driver, SetUp.Sc, " We have clicked on View price to check for the options");
+				for(int i =0;i<MultipleOptionSelectionforPrices.size();i++) {
+					String priceofTheflight = MultipleOptionSelectionforPrices.get(i).findElement(By.xpath("./p")).getText();
+					System.out.println("Price from inner Loop:: "+priceofTheflight);
+					if(priceFromMainHeader.equalsIgnoreCase(priceofTheflight)) {
+						System.out.println("Flight Price matched");
+						//static reference//
+						k=i+1;
+						System.out.println(k);
+						PriceToSentBack =priceofTheflight.split(" ");
+						break;
+					}
+				}
+				if(PriceToSentBack.equals(null)) {
+					PriceToSentBack = new String[] {"","0"};
+					user.EmbedText(SetUp.Sc, "Didnot find a matching Flight price from header to the floater ::"+priceFromMainHeader);
+				}
+				
+			}else {
+				//static reference
+				PriceToSentBack = priceFromMainHeader.split(" ");
+//				ButtonToBookSingleTrip =SingLeTripLowestFareButton;
+				System.out.println(SingLeTripLowestFareButton.getText());
+				user.EmbedText(SetUp.Sc, "We have the Book Now Button directly");
+			}
+			return PriceToSentBack[1].trim().replace(",","");
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public PageObjects_ReviewYourBooking Click_On_Book_forSingleTrip() {
+		try {
+			if(k!=0) {
+				By ButtonToBookSingleTrip_locator = By.xpath("(//div[contains(@id,'flight_list_item')])[1]/div[@class='collapse show']//div[@class='viewFareRowWrap']//div[contains(@class,'viewFareBtnCol')]["+(k)+"]/button");
+				SingLeTripLowestFareButton=driver.findElement(ButtonToBookSingleTrip_locator);
+				System.out.println(SingLeTripLowestFareButton.getText());
+			}
+			user.isWebElementPresent(SingLeTripLowestFareButton, driver, 10);
+			user.HighlighterOnElem(driver, SingLeTripLowestFareButton);
+			//user.embedScreenshot(driver, SetUp.Sc, "Clicking on it");
+			//USer clicking on Book
+			SingLeTripLowestFareButton.click();
+			POreview = new PageObjects_ReviewYourBooking();
+			return POreview;
+			
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public Boolean CliCkOnBook() {
 		try {
 			user.isWebElementPresent(ButtonToBOOKNOW, driver, 2);
-			user.embedScreenshot(driver, SetUp.Sc, null);
+			user.embedScreenshot(driver, SetUp.Sc, "");
 			Boolean booknow = user.isClickable(driver, ButtonToBOOKNOW, 5);
 			if (booknow) {
 				user.EmbedText(SetUp.Sc, "Clicked on the Book Now");
@@ -171,7 +253,7 @@ public class PageObjects_FlightSearchedPage {
 			Boolean check = user.isWebElementPresent(FlightFarefromFloatingMenu, driver, 10);
 			String price[] = null;
 			if (check) {
-				user.embedScreenshot(driver, SetUp.Sc, null);
+				user.embedScreenshot(driver, SetUp.Sc, "");
 				user.EmbedText(SetUp.Sc, "got the price");
 				price = FlightFarefromFloatingMenu.getText().split(" ");
 
@@ -182,7 +264,7 @@ public class PageObjects_FlightSearchedPage {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
-			return "0";
+			return null;
 		}
 	}
 

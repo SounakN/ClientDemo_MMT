@@ -93,31 +93,50 @@ public class StepDefinition_FlightSearchedPage {
 			Assert.fail();
 		}
 	}
-	@Then("Fetch the flight fare from the floating menu and compare")
-	public void Fetch_the_flight_fare_from_the_floating_menu_and_compare() {
+	@Then("Fetch the flight fare from the floating menu and compare for {string}")
+	public void Fetch_the_flight_fare_from_the_floating_menu_and_compare(String tripType) {
 		try {
-			//click on the Book Now Button
 			PageObjects_FlightSearchedPage a = new PageObjects_FlightSearchedPage();
+			if(tripType.equalsIgnoreCase("roundTrip")) {
+			//click on the Book Now Button
 			Assert.assertTrue(a.CliCkOnBook());
 			//Will verify the price from the pop up
-			FetchedPrice = Integer.parseInt(a.verifyPricefromPopUp());
+			String check = a.verifyPricefromPopUp();
+			Assert.assertNotNull(check);
+			FetchedPrice = Integer.parseInt(check);
 			//Will do an assertion
 			Supposedtobeprice = priceofFlights.get(Flightnamewithlowest);
 			
 			user.EmbedText(SetUp.Sc, "Flight price from filters:: "+Supposedtobeprice+ " and flight price fetched when Continuing for final checkout::"+FetchedPrice);
+			}
+			else {	
+				Supposedtobeprice = priceofFlights.get(Flightnamewithlowest);
+				String check=a.fetch_priceforSingleTrips();
+				Assert.assertNotNull(check);
+				FetchedPrice= Integer.parseInt(check);
+				
+				user.EmbedText(SetUp.Sc, "Flight price from filters:: "+Supposedtobeprice+ " and flight price fetched when Continuing for final checkout::"+FetchedPrice);
+			}
 			Assert.assertTrue(Supposedtobeprice==FetchedPrice);
+			user.EmbedText(SetUp.Sc, "Assertion for the price passed");
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			Assert.fail();
 		}
 	}
-	@Then("Go to Review your booking page and verify final flight fare")
-	public void Go_to_Review_your_booking_page_and_verify_final_flight_fare() {
+	@Then("Go to Review your booking page and verify final flight fare for {string}")
+	public void Go_to_Review_your_booking_page_and_verify_final_flight_fare(String tripType) {
 		try {
 			String currentWindow = SetUp.driver.getWindowHandle();
 			PageObjects_FlightSearchedPage a = new PageObjects_FlightSearchedPage();
-			PageObjects_ReviewYourBooking b = a.clickOnContinue();
+			PageObjects_ReviewYourBooking b = null;
+			if(tripType.equalsIgnoreCase("roundTrip")) {
+				b = a.clickOnContinue();
+			}else {
+				b =a.Click_On_Book_forSingleTrip();
+			}
+
 			Assert.assertNotNull(b);
 			Set<String> windows = SetUp.driver.getWindowHandles();
 			Iterator<String> it = windows.iterator();
@@ -128,7 +147,7 @@ public class StepDefinition_FlightSearchedPage {
 				if(!handle.equals(currentWindow)) {
 					SetUp.driver.switchTo().window(handle);
 					int check = b.AddPriceandMatch();
-					user.embedScreenshot(SetUp.driver, SetUp.Sc, null);
+					user.embedScreenshot(SetUp.driver, SetUp.Sc, "");
 					if(check<0) {
 						throw new Exception("there is issue with flight");
 					}else {

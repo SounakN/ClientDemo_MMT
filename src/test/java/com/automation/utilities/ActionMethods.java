@@ -78,7 +78,7 @@ public class ActionMethods {
 	}  
 	public void sync_withStaleElem(WebDriver driver, WebElement element) {
 		try {
-			FluentWait<WebDriver> wait = new WebDriverWait(driver, 30).ignoring(StaleElementReferenceException.class)
+			FluentWait<WebDriver> wait = new WebDriverWait(driver, 300).ignoring(StaleElementReferenceException.class)
 					.pollingEvery(5, TimeUnit.SECONDS).withTimeout(30, TimeUnit.SECONDS);
 			;
 			wait.until(ExpectedConditions.visibilityOf(element));
@@ -327,7 +327,7 @@ public class ActionMethods {
 
 		byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 		result.attach(screenshot, "image/png", message);
-
+		result.log(message);
 	}
 
 	public void EmbedText(Scenario result, String message) {
@@ -346,6 +346,25 @@ public class ActionMethods {
 			WebElement foo = wait.until(new Function<WebDriver, WebElement>() {
 				public WebElement apply(WebDriver driver) {
 					return driver.findElement(Locator);
+				}
+			});
+			return foo;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public WebElement fluentWaitonElem(By Locator, WebElement elem, WebDriver driver, int timeout, int polltime) {
+		try {
+			Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(timeout, TimeUnit.SECONDS)
+
+					.pollingEvery(polltime, TimeUnit.SECONDS).ignoring(org.openqa.selenium.StaleElementReferenceException.class).ignoring(org.openqa.selenium.NoSuchElementException.class)
+					.ignoring(org.openqa.selenium.ElementNotVisibleException.class);
+					;
+			WebElement foo = wait.until(new Function<WebDriver, WebElement>() {
+				public WebElement apply(WebDriver driver) {
+					return elem.findElement(Locator);
 				}
 			});
 			return foo;

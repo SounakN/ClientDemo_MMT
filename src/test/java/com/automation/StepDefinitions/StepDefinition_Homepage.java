@@ -15,7 +15,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 
-public class StepDefinition_Homepage {
+public class StepDefinition_HomePage {
 
 	public ActionMethods user = new ActionMethods();
 	public static HashMap<String, Integer> OneWayTrip = new HashMap<String, Integer>();
@@ -56,6 +56,7 @@ public class StepDefinition_Homepage {
 	public void Select_the_Following_values_for_your_flight_of_return_type(String tripType, DataTable dataset) {
 		try {
 			PageObjects_HomePage a = new PageObjects_HomePage();
+			OneWayTrip=new HashMap<String, Integer>();
 			List<Map<String, String>> data = dataset.asMaps(String.class, String.class);
 			if (tripType.equalsIgnoreCase("oneWayTrip")) {
 				for (int i = 0; i < data.size(); i++) {
@@ -80,7 +81,8 @@ public class StepDefinition_Homepage {
 						RoundTrip.putAll(OneWayTrip);
 						System.out.println(RoundTrip);
 						if(RoundTrip.containsValue(-1)) {
-							user.EmbedText(SetUp.Sc, "The sent in Date in inPOast cannot proceed with Testing");
+							user.EmbedText(SetUp.Sc, "The sent in Date in in Past cannot proceed with Testing");
+							Assert.fail("The sent date is in Past Date so failed the case");
 							break;
 						}
 					}
@@ -97,11 +99,11 @@ public class StepDefinition_Homepage {
 	@Then("Click on the Search Button and Verify that you are on Flight Search page")
 	public void Click_on_the_Search_Button_and_Verify_that_you_are_on_Flight_Search_page() {
 		try {
-			PageObjects_HomePage a = new PageObjects_HomePage();
-			PageObjects_FlightSearchedPage b = a.clickOnSearch();
-			Assert.assertNotNull(b);
-			Boolean check = b.PresenceofImage();
-			Assert.assertTrue(check);
+				PageObjects_HomePage a = new PageObjects_HomePage();
+				PageObjects_FlightSearchedPage b = a.clickOnSearch();
+				Assert.assertNotNull(b);
+				Boolean check = b.PresenceofImage();
+				Assert.assertTrue(check);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
