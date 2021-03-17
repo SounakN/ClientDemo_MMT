@@ -27,6 +27,7 @@ public class StepDefinition_FlightSearchedPage {
 	public static String Flightnamewithlowest;
 	public int FetchedPrice;
 	public int Supposedtobeprice;
+	public String currentWindow;
 
 	
 	@Then("Validate the following details after flight has been searched {string}")
@@ -128,7 +129,7 @@ public class StepDefinition_FlightSearchedPage {
 	@Then("Go to Review your booking page and verify final flight fare for {string}")
 	public void Go_to_Review_your_booking_page_and_verify_final_flight_fare(String tripType) {
 		try {
-			String currentWindow = SetUp.driver.getWindowHandle();
+			currentWindow  = SetUp.driver.getWindowHandle();
 			PageObjects_FlightSearchedPage a = new PageObjects_FlightSearchedPage();
 			PageObjects_ReviewYourBooking b = null;
 			if(tripType.equalsIgnoreCase("roundTrip")) {
@@ -146,16 +147,19 @@ public class StepDefinition_FlightSearchedPage {
 		
 				if(!handle.equals(currentWindow)) {
 					SetUp.driver.switchTo().window(handle);
+					Assert.assertTrue(b.ValidInItenerayPage());
+					user.embedScreenshot(SetUp.driver, SetUp.Sc, "In the review booking page");
 					int check = b.AddPriceandMatch();
 					user.embedScreenshot(SetUp.driver, SetUp.Sc, "");
 					if(check<0) {
 						throw new Exception("there is issue with flight");
 					}else {
 						user.EmbedText(SetUp.Sc, "The price returned after deductiing Others:: "+check+" and the Price that was selected by the user:: "+Supposedtobeprice);
+						SetUp.driver.close();
+						SetUp.driver.switchTo().window(currentWindow);
 						Assert.assertTrue(check==Supposedtobeprice);
 					}
-					SetUp.driver.close();
-					SetUp.driver.switchTo().window(currentWindow);
+					
 					
 					break;
 				}
@@ -165,6 +169,8 @@ public class StepDefinition_FlightSearchedPage {
 
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
+			SetUp.driver.close();
+			SetUp.driver.switchTo().window(currentWindow);
 			e.printStackTrace();
 			Assert.fail();
 		}

@@ -57,6 +57,7 @@ public class StepDefinition_HomePage {
 		try {
 			PageObjects_HomePage a = new PageObjects_HomePage();
 			OneWayTrip=new HashMap<String, Integer>();
+			RoundTrip = new HashMap<String, Integer>();
 			List<Map<String, String>> data = dataset.asMaps(String.class, String.class);
 			if (tripType.equalsIgnoreCase("oneWayTrip")) {
 				for (int i = 0; i < data.size(); i++) {
@@ -67,6 +68,11 @@ public class StepDefinition_HomePage {
 						OneWayTrip=a.SelectValueofMonthandDay(data.get(i).get("Values"), data.get(i).get("Attribute"));
 						Assert.assertNotNull(OneWayTrip);
 						System.out.println(OneWayTrip);
+						if(OneWayTrip.containsValue(-1)) {
+							user.EmbedText(SetUp.Sc, "The sent in Date in in Past cannot proceed with Testing");
+							Assert.fail("The sent date is in Past Date so failed the case");
+							break;
+						}
 					}
 				}
 
@@ -83,6 +89,10 @@ public class StepDefinition_HomePage {
 						if(RoundTrip.containsValue(-1)) {
 							user.EmbedText(SetUp.Sc, "The sent in Date in in Past cannot proceed with Testing");
 							Assert.fail("The sent date is in Past Date so failed the case");
+							break;
+						}else if(RoundTrip.containsValue(-2)) {
+							user.EmbedText(SetUp.Sc, "The sent in Date for Return is before the selected TO date");
+							Assert.fail("The sent in Date for Return is before the selected TO date");
 							break;
 						}
 					}

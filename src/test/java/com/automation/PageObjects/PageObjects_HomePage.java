@@ -234,7 +234,7 @@ public class PageObjects_HomePage {
 								throw new Exception("It is not clickable at this sent in date So no proceeding with Testing");
 							}else {
 								user.EmbedText(SetUp.Sc, "Date is not clickable as it is in Past Date or previous to To Date");
-								throw new Exception("It is not clickable at this sent in date although it is not in past");
+								throw new Exception("It is not clickable at this sent in date although it is not in past but previous to To Date");
 							}
 							
 						} else {
@@ -276,7 +276,11 @@ public class PageObjects_HomePage {
 					DatewisePrice.put("return", -1);
 				}
 				return DatewisePrice;
-			}else {
+			}else if(e.getMessage().equalsIgnoreCase("It is not clickable at this sent in date although it is not in past but previous to To Date")){
+				DatewisePrice.put("return", -2);
+				return DatewisePrice;
+			}
+			else {
 				return null;
 			}
 			

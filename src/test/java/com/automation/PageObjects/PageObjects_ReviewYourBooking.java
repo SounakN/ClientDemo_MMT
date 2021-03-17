@@ -1,5 +1,6 @@
 package com.automation.PageObjects;
 
+import org.apache.poi.hslf.dev.UserEditAndPersistListing;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,6 +28,16 @@ public class PageObjects_ReviewYourBooking {
 	
 	public PageObjects_ReviewYourBooking() {
 		PageFactory.initElements(driver, this);
+	}
+	public Boolean ValidInItenerayPage() {
+		try {
+			Boolean check =user.isWebElementPresent(ReviewBookingPageVerification, driver, 30);
+			return check;
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
 	}
 	public String ExtractPrice(WebElement Price) {
 		try {

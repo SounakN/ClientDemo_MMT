@@ -351,7 +351,7 @@ public class ActionMethods {
 			return foo;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 			return null;
 		}
 	}
