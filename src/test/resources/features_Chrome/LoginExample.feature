@@ -32,7 +32,7 @@ Feature: Search Flights
       | Attribute | Values    |
       | Trip Style | Round Trip |
       | FROM      | Hyderabad |
-      | TO        | Delhi    |
+      | TO        | Pune    |
     Then filter and select the flights based on following flight companies
       | Flight Companies |
       | Air India        |
