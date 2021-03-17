@@ -24,7 +24,7 @@ Feature: Search Flights
     Then Select the Following values for your flight of return type "<trip selection>"
       | Attribute | Values            |
       | fromCity  | HYD               |
-      | toCity    | PNQ               |
+      | toCity    | DEL               |
       | departure | March-2021-22-Mar |
       | return    | March-2021-23-Mar |
     Then Click on the Search Button and Verify that you are on Flight Search page
@@ -32,7 +32,7 @@ Feature: Search Flights
       | Attribute | Values    |
       | Trip Style | Round Trip |
       | FROM      | Hyderabad |
-      | TO        | Pune    |
+      | TO        | Delhi    |
     Then filter and select the flights based on following flight companies
       | Flight Companies |
       | Air India        |
