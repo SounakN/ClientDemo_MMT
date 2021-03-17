@@ -42,16 +42,16 @@ Feature: Search Flights
       | trip selection |
       | oneWayTrip     |
 
-	 Scenario Outline: Validate that when trip is oneWay we cannot Search flights which are in Past Date
-    Given That user is in Homepage
-    Then select the trip to "<trip selection>"
-    Then Select the Following values for your flight of return type "<trip selection>"
-      | Attribute | Values            |
-      | fromCity  | HYD               |
-      | toCity    | DEL               |
-      | departure | March-2021-14-Mar |
-
-
-    Examples: 
-      | trip selection |
-      | oneWayTrip     |
+#	 Scenario Outline: Validate that when trip is oneWay we cannot Search flights which are in Past Date
+    #Given That user is in Homepage
+    #Then select the trip to "<trip selection>"
+    #Then Select the Following values for your flight of return type "<trip selection>"
+      #| Attribute | Values            |
+      #| fromCity  | HYD               |
+      #| toCity    | DEL               |
+      #| departure | March-2021-14-Mar |
+#
+#
+    #Examples: 
+      #| trip selection |
+      #| oneWayTrip     |
